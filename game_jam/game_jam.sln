@@ -1,0 +1,25 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{9CC1444C-789A-F4BE-48A3-499812E4E90D}") = "game_jam", "Assembly-CSharp.csproj", "{7DAEFFB2-D1C7-BB3E-5DA0-8DCFE9276999}"
+EndProject
+Project("{9CC1444C-789A-F4BE-48A3-499812E4E90D}") = "game_jam", "Assembly-CSharp-Editor.csproj", "{60710BBB-EBCA-C6E6-2158-4DF9E2BEE26D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7DAEFFB2-D1C7-BB3E-5DA0-8DCFE9276999}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DAEFFB2-D1C7-BB3E-5DA0-8DCFE9276999}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DAEFFB2-D1C7-BB3E-5DA0-8DCFE9276999}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DAEFFB2-D1C7-BB3E-5DA0-8DCFE9276999}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60710BBB-EBCA-C6E6-2158-4DF9E2BEE26D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60710BBB-EBCA-C6E6-2158-4DF9E2BEE26D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60710BBB-EBCA-C6E6-2158-4DF9E2BEE26D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60710BBB-EBCA-C6E6-2158-4DF9E2BEE26D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
