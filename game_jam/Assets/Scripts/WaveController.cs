@@ -6,7 +6,8 @@ public class WaveController : MonoBehaviour {
 
 	private GameObject mPlayerWaveCollider;
 	private CircleCollider2D mCircleCollider;
-	private float waveCastCoolDown = 3.0f;
+	private PhotonWaveEffectsController mWaveEffectController;
+	public float waveCastCoolDown = 3.0f;
 	private float waveCastTimer;
 	public float waveSpeed = 0.5f;
 	public enum WaveType {Long, Mid, Short};
@@ -26,6 +27,7 @@ public class WaveController : MonoBehaviour {
 		mCircleCollider = this.GetComponent<CircleCollider2D>();
 		mCircleCollider.radius = waveInitialRadius;
 		waveCastTimer = 0.0f;
+		mWaveEffectController = this.GetComponent<PhotonWaveEffectsController>();
 	}
 	
 	// Update is called once per frame
@@ -54,6 +56,7 @@ public class WaveController : MonoBehaviour {
 	}
 
 	IEnumerator waveStart() {
+		mWaveEffectController.PlayEffect();
 		while (mCircleCollider.radius < waveMaxRadius) {
 			mCircleCollider.radius += waveSpeed * Time.deltaTime;
 			//Debug.Log("wave radius: " + mCircleCollider.radius);

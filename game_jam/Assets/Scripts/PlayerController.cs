@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour {
 
 	// Ability
 	// Used as initial amount
-	public int currentWaveAmount = 0;
+	public int currentWaveAmount = 2;
 	private float wavePressedTime = 0;
 	public float WaveMidPressTimeThreshold = 1.0f;
 	public float WaveLongPressTimeThreshold = 3.0f;
@@ -63,6 +63,9 @@ public class PlayerController : MonoBehaviour {
 
 	public bool isGrounded() {
 		RaycastHit2D hit = Physics2D.Raycast(mRigidbody.transform.position, Vector2.down, distanceToGround + 0.1f);
+		if (hit.collider != null && hit.collider.CompareTag("photon")) {
+			return false;
+		}
 		return hit.collider != null;
 	}
 
@@ -112,7 +115,6 @@ public class PlayerController : MonoBehaviour {
 			isCastingWave = false;
 		}
 	}
-
 	// Deprecated
 	public void increaseWaveAmount(int amount) {
 		currentWaveAmount += amount;
