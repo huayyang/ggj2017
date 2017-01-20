@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour {
 
 	// Ability
 	private WaveController.WaveType currentWaveType;
-	private int currentWaveAmount;
+	private int currentWaveAmount = 2;
 	
 	// Use this for initialization
 	void Start () {
@@ -54,29 +54,16 @@ public class PlayerController : MonoBehaviour {
 			return false;
 		}
 
-		if (mWaveController.canCastWave()) {
+		if (!mWaveController.canCastWave()) {
 			return false;
 		}
 
 		return true;
 	}
 	public void handleCastWaves() {
-		if (Input.GetKeyDown(KeyCode.A) && canCastWave()) {
+		if (Input.GetKeyDown(KeyCode.Space) && canCastWave()) {
 			mWaveController.castWave(currentWaveType);
 		}
-	}
-	bool canWaveHitObject(Vector3 playerPosition, Vector3 targetPosition) {
-		RaycastHit2D hit = Physics2D.Raycast(playerPosition, targetPosition - playerPosition);
-		if (hit != null && hit.collider.CompareTag("waveBlocker")) {
-			return false;
-		}
-		return true;
-	}
-	public void onWaveHitObject(Collider2D collider) {
-		if (!canWaveHitObject(mWaveCollider.transform.position, collider.transform.position)) {
-			return;
-		}
-		Debug.Log("Player OnWaveHit");
 	}
 
 	public void increaseWaveAmount(int amount) {
