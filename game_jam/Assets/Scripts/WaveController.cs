@@ -9,9 +9,15 @@ public class WaveController : MonoBehaviour {
 	private float waveCastCoolDown = 3.0f;
 	private float waveCastTimer;
 	public float waveSpeed = 0.5f;
-	public enum WaveType {North, East, South, West};
+	public enum WaveType {Long, Mid, Short};
 	public WaveType mWaveType;
 	public float waveMaxRadius = 10.0f;
+	public const float LongWaveSpeed = 0.5f;
+	public const float LongWaveMaximumRadius = 10.0f;
+	public const float MidWaveSpeed = 0.75f;
+	public const float MidWaveMaximumRadius = 7.5f;
+	public const float ShortWaveSpeed = 1.0f;
+	public const float ShortWaveMaximumRadius = 5.0f;
 
 	private float waveInitialRadius = 0.5f;
 	// Use this for initialization
@@ -34,6 +40,16 @@ public class WaveController : MonoBehaviour {
 	public void castWave(WaveType waveType) {
 		mWaveType = waveType;
 		waveCastTimer = waveCastCoolDown;
+		if (waveType == WaveType.Long) {
+			waveSpeed = LongWaveSpeed;
+			waveMaxRadius = LongWaveMaximumRadius;
+		} else if (waveType == WaveType.Mid) {
+			waveSpeed = MidWaveSpeed;
+			waveMaxRadius = MidWaveMaximumRadius;
+		} else if (waveType == WaveType.Short) {
+			waveSpeed = ShortWaveSpeed;
+			waveMaxRadius = ShortWaveMaximumRadius;
+		}
 		StartCoroutine(waveStart());
 	}
 

@@ -5,10 +5,10 @@ using UnityEngine;
 public class WaveTriggerController : MonoBehaviour {
 	public GameObject triggerActionHandler;
 	public bool isEnabledOnStart;
-	private SpriteRenderer handlerSpriteRender;
+	public float resetTime = 0.0f;
 	// Use this for initialization
 	void Start () {
-		handlerSpriteRender = triggerActionHandler.GetComponent<SpriteRenderer>();
+
 	}
 	
 	// Update is called once per frame
@@ -16,13 +16,23 @@ public class WaveTriggerController : MonoBehaviour {
 		
 	}
 
-	void setEnable(bool rEnabled) {
+	IEnumerator setEnable(bool rEnabled) {
+		float statesChangeTimer = 0.0f;
 		triggerActionHandler.SetActive(rEnabled);
-		//handlerSpriteRender.enabled = rEnabled;
+		while (statesChangeTimer < resetTime) {
+			statesChangeTimer += Time.deltaTime;
+			yield return null;
+		}
+
+		triggerActionHandler.SetActive(!rEnabled);
 	}
 
 	void handleWaveAction() {
 		Debug.Log("handleWaveAction");
-		setEnable(!triggerActionHandler.activeSelf);
+		if (resetTime > 0) {
+			StartCoroutine(setEnable(!triggerActionHandler.activeSelf));
+		} else {
+			triggerActionHandler.SetActive(!triggerActionHandler.activeSelf);
+		}
 	}
 }
