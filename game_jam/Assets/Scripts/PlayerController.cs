@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
 
@@ -30,6 +31,8 @@ public class PlayerController : MonoBehaviour {
 	void Update () {
 		handlePlayerMovement(Time.deltaTime);
 		handleCastWaves();
+		handlePlayerRestart();
+		checkDeath();
 	}
 
 	void handlePlayerMovement(float deltaTime) {
@@ -37,6 +40,12 @@ public class PlayerController : MonoBehaviour {
 		Vector2 movement = new Vector2(Input.GetAxisRaw("Horizontal") * mMoveSpeed, Input.GetAxisRaw("Vertical") * mJumpSpeed);
 		if (movement != Vector2.zero) {
 			mRigidbody.AddForce(movement);
+		}
+	}
+
+	void handlePlayerRestart() {
+		if (Input.GetKeyDown(KeyCode.R)) {
+			death();
 		}
 	}
 
@@ -72,5 +81,16 @@ public class PlayerController : MonoBehaviour {
 
 	public void increaseWaveAmount(int amount) {
 		currentWaveAmount += amount;
+	}
+
+	private void checkDeath() {
+		if (mRigidbody.transform.position.y <= -100) {
+			death();
+		}
+	}
+
+	public void death() {
+		Scene loadedLevel = SceneManager.GetActiveScene();
+     	SceneManager.LoadScene (loadedLevel.buildIndex);
 	}
 }
