@@ -52,14 +52,12 @@ public class PlayerController : MonoBehaviour {
 	void checkPlayerJumpingAnimation() {
 		bool isOnGround = isGrounded();
 		if (!isOnGround && mRigidbody.velocity.y < -2.0f) {
-			Debug.Log("startFall: " + mRigidbody.velocity.y);
 			isFalling = true;
 			isInAir = true;
 			mAnimator.SetBool("isFalling", isFalling);
 		}
 
 		if (isFalling && isOnGround) {
-			Debug.Log("Touch Ground");
 			mAnimator.SetTrigger("touchGround");
 			mRigidbody.velocity.Set(mRigidbody.velocity.x, 0);
 			isFalling = false;
@@ -85,7 +83,6 @@ public class PlayerController : MonoBehaviour {
 				if (movement.y != 0) {
 					isJumping = true;
 					isInAir = true;
-					Debug.Log("start jump");
 					mAnimator.SetTrigger("startJump");
 				}
 			} else if (movementForce.x != 0){
