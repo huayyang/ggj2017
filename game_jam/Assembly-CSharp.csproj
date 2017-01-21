@@ -51,6 +51,7 @@
   <ItemGroup>
      <Compile Include="Assets\Particle Ribbon\Scripts\ReverseNormals.cs" />
      <Compile Include="Assets\Scripts\CameraController.cs" />
+     <Compile Include="Assets\Scripts\DisappearTrapController.cs" />
      <Compile Include="Assets\Scripts\LaserController.cs" />
      <Compile Include="Assets\Scripts\PhotonController.cs" />
      <Compile Include="Assets\Scripts\PhotonWaveEffectsController.cs" />
