@@ -146,6 +146,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	public void death() {
+		enabled = false;
 		mMusicManager.PlayDeathSound();
 		StartCoroutine(reloadAfterTime(3.0f));
 	}

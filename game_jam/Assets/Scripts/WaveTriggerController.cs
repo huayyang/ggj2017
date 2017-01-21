@@ -6,15 +6,24 @@ public class WaveTriggerController : MonoBehaviour {
 	public GameObject triggerActionHandler;
 	public bool isEnabledOnStart;
 	public float resetTime = 0.0f;
+	private float triggerTimer = 0.0f;
 	private MusicManager mMusicManager;
+	private Animator mAnimator;
 	// Use this for initialization
 	void Start () {
 		mMusicManager = GameObject.FindGameObjectWithTag("musicManager").GetComponent<MusicManager>();
+		mAnimator = this.GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if (resetTime <= 0) {
+			return;
+		} 
+		if (triggerTimer > resetTime) {
+			mAnimator.SetBool("triggerEnabled", false);
+		}
+		triggerTimer += Time.deltaTime;
 	}
 
 	IEnumerator setEnable(bool rEnabled) {
@@ -30,6 +39,8 @@ public class WaveTriggerController : MonoBehaviour {
 
 	void handleWaveAction() {
 		mMusicManager.PlayWaveTriggerSound();
+		mAnimator.SetBool("triggerEnabled", true);
+		triggerTimer = 0.0f;
 		if (resetTime > 0) {
 			StartCoroutine(setEnable(!triggerActionHandler.activeSelf));
 		} else {
