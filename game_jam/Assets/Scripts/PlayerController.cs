@@ -32,26 +32,29 @@ public class PlayerController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		mRigidbody = this.GetComponent<Rigidbody2D>();
-		mWaveController = GameObject.FindGameObjectWithTag("waveCollider").GetComponent<WaveController>();
 		mWaveCollider = GameObject.FindGameObjectWithTag("waveCollider");
+		mWaveController = mWaveCollider.GetComponent<WaveController>();
 		isCastingWave = false;
 		distanceToGround = this.GetComponent<BoxCollider2D>().bounds.max.y - mRigidbody.transform.position.y;
 		mAnimator = this.GetComponent<Animator>();
 		mMusicManager = GameObject.FindGameObjectWithTag("musicManager").GetComponent<MusicManager>();
 	}
 	
-	// Update is called once per frame
-	void Update() {
+	void FixedUpdate() {
 		handlePlayerMovement(Time.deltaTime);
 		handlePlayerRestart();
 		checkPlayerJumpingAnimation();
 		handleCastWaves();
 		checkDeath();
 	}
+	// Update is called once per frame
+	void Update() {
+		
+	}
 
 	void checkPlayerJumpingAnimation() {
 		bool isOnGround = isGrounded();
-		if (!isOnGround && mRigidbody.velocity.y < -2.0f) {
+		if (!isOnGround && mRigidbody.velocity.y < -0.1f) {
 			isFalling = true;
 			isInAir = true;
 			mAnimator.SetBool("isFalling", isFalling);
@@ -92,8 +95,10 @@ public class PlayerController : MonoBehaviour {
 			if (isJumping && movement.y > 0) {
 				mMusicManager.PlayJumpSound();
 			}
-
-			mAnimator.SetFloat("inputX", movement.x);
+			if (movement.x != 0) {
+				mAnimator.SetFloat("inputX", movement.x);
+			}
+			
 			mAnimator.SetFloat("inputY", movement.y);
 		}
 

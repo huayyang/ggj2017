@@ -4,3 +4,5 @@
 *.bin
 
 game_jam/Library/*.*
+
+game_jam/Temp/*.*

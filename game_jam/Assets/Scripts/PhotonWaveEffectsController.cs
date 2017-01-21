@@ -14,13 +14,16 @@ public class PhotonWaveEffectsController : MonoBehaviour {
 	public float photonMidMaximumRange = 7.5f;
 	public float photonLongMaximumRange = 10.0f;
 	private float photonSpeed = 0.5f;
-	private float photonMaximumRange = 5.0f;
+	private float photonMaximumRange = 10.0f;
 	private GameObject[] photons;
 	private LineRenderer line;
 	private LineRenderer[] lines;
 	private int currLines = 0;
 	public Material material;
 	public float lineWidth = 0.5f;
+
+	private float destroyTimeLimit = 10.0f;
+	private float lastCastTime = 0.0f;
 	// Use this for initialization
 	void Start () {
 		if (photons == null) {
@@ -29,6 +32,8 @@ public class PhotonWaveEffectsController : MonoBehaviour {
  		if (lines == null) {
 			lines = new LineRenderer[numberOfPhoton];
 		}
+		lastCastTime = 0;
+		destroyTimeLimit = 10.0f;
 	}
 
 	private void createLine(Vector3 startPos, Vector3 endPos) {
@@ -52,6 +57,10 @@ public class PhotonWaveEffectsController : MonoBehaviour {
 	void Update() {
 		updateLines();
 		updatePhotons();
+		lastCastTime += Time.deltaTime;
+		if (destroyTimeLimit < lastCastTime) {
+			clearLinesAndPhotons();
+		}
 	}
 
 	private void updateLines() {
@@ -67,10 +76,6 @@ public class PhotonWaveEffectsController : MonoBehaviour {
 	private void updatePhotons() {
 		for (int i = 0; i < numberOfPhoton; ++i) {
 			if (photons[i] != null) {
-				if (Vector3.Distance(photons[i].transform.position, transform.position) >= photonMaximumRange) {
-					clearLinesAndPhotons();
-					return;
-				}
 				photons[i].transform.Translate(photons[i].transform.right * photonSpeed * Time.deltaTime);
 			}
 		}
@@ -99,10 +104,12 @@ public class PhotonWaveEffectsController : MonoBehaviour {
 		if (photons == null) {
 			photons = new GameObject[numberOfPhoton];
 		}
+		Vector3 createPos = transform.position;
+		createPos.z -= 1;
 		Quaternion rotation = new Quaternion();
 		float degreeDifference = 360.0f / numberOfPhoton;
 		for (int i = 0; i < numberOfPhoton; ++i) {
-			GameObject photon = Instantiate(photonPrefab, transform.position, rotation);
+			GameObject photon = Instantiate(photonPrefab, createPos, rotation);
 			photon.GetComponent<PhotonController>().photonId = i;
 			rotation = Quaternion.Euler(rotation.eulerAngles.x, rotation.eulerAngles.y, rotation.eulerAngles.z + degreeDifference);
 			photons[i] = photon;
@@ -138,5 +145,6 @@ public class PhotonWaveEffectsController : MonoBehaviour {
 		clearLinesAndPhotons();
 		createPhotons();
 		connectAllPhotons();
+		lastCastTime = 0.0f;
 	}
 }
