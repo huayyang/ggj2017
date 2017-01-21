@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour {
 	private Rigidbody2D mRigidbody;
 	private WaveController mWaveController;
 	private GameObject mWaveCollider;
+	private Animator mAnimator;
 
 	// Movements
 	public float mMoveForce = 5f;
@@ -32,6 +33,7 @@ public class PlayerController : MonoBehaviour {
 		mWaveCollider = GameObject.FindGameObjectWithTag("waveCollider");
 		isCastingWave = false;
 		distanceToGround = this.GetComponent<BoxCollider2D>().bounds.max.y - mRigidbody.transform.position.y;
+		mAnimator = this.GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -47,18 +49,24 @@ public class PlayerController : MonoBehaviour {
 
 	void handlePlayerMovement(float deltaTime) {
 		bool isWalking = false;
-		Vector2 movement = new Vector2(Input.GetAxisRaw("Horizontal") * mMoveForce, Input.GetAxisRaw("Vertical") * mJumpForce);
+		Vector2 movement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+		Vector2 movementForce = new Vector2(movement.x * mMoveForce, movement.y * mJumpForce);
 		
-		if (movement != Vector2.zero) {
+		if (movementForce != Vector2.zero) {
 			if (Mathf.Abs(mRigidbody.velocity.x) >= horizontalMaximumSpeed) {
-				movement.x = 0;
+				movementForce.x = 0;
 			}
 			if (isGrounded()) {
-				mRigidbody.AddForce(movement * Time.deltaTime);
-			} else if (movement.x != 0){
-				mRigidbody.AddForce(new Vector2(movement.x * Time.deltaTime, 0));
+				mRigidbody.AddForce(movementForce * Time.deltaTime);
+				isWalking = true;
+			} else if (movementForce.x != 0){
+				mRigidbody.AddForce(new Vector2(movementForce.x * Time.deltaTime, 0));
 			}
 		}
+
+		mAnimator.SetBool("isWalking", isWalking);
+		mAnimator.SetFloat("inputX", movement.x);
+		mAnimator.SetFloat("inputY", movement.y);
 	}
 
 	public bool isGrounded() {
