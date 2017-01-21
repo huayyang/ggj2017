@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class WarpSpotController : MonoBehaviour {
-	public Transform warpDestination;
-	private GameObject mPlayer;
+	public string nextLevelScene;
 	// Use this for initialization
 	void Start () {
-		mPlayer = GameObject.FindGameObjectWithTag("Player");
+		
 	}
 	
 	// Update is called once per frame
@@ -21,6 +21,6 @@ public class WarpSpotController : MonoBehaviour {
 		}
 
 		//TODO(Huayu): Fade in, Fade out
-		mPlayer.transform.position = warpDestination.transform.position;
+		SceneManager.LoadScene(nextLevelScene);
 	}
 }

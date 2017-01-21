@@ -70,8 +70,11 @@
      <None Include="Assets\Tiled2Unity\Imported\place_holder_level.tiled2unity.xml" />
      <None Include="Assets\Tiled2Unity\Shaders\shaDepth.shader" />
      <None Include="Assets\Tiled2Unity\Shaders\shaDiffuseDepth.shader" />
+     <None Include="Assets\Tiled2Unity\Imported\platformer_level_1.tiled2unity.xml" />
+     <None Include="Assets\Tiled2Unity\Imported\platformer_level_3.tiled2unity.xml" />
      <None Include="Assets\Tiled2Unity\Materials\_ReadMe.txt" />
      <None Include="Assets\Tiled2Unity\Textures\_ReadMe.txt" />
+     <None Include="Assets\Tiled2Unity\Imported\platformer_level_2.tiled2unity.xml" />
      <None Include="Assets\Tiled2Unity\Shaders\shaColorKey.shader" />
      <None Include="Assets\Tiled2Unity\Shaders\shaDepthColorKey.shader" />
      <None Include="Assets\Particle Ribbon\readme_Simple_Particle_Ribbon.txt" />
