@@ -54,11 +54,11 @@ public class WaveController : MonoBehaviour {
 			waveMaxRadius = ShortWaveMaximumRadius;
 		}
 		mCircleCollider.enabled = true;
-		StartCoroutine(waveStart());
+		StartCoroutine(waveStart(waveType));
 	}
 
-	IEnumerator waveStart() {
-		mWaveEffectController.PlayEffect();
+	IEnumerator waveStart(WaveType waveType) {
+		mWaveEffectController.PlayEffect(waveType);
 		while (mCircleCollider.radius < waveMaxRadius) {
 			mCircleCollider.radius += waveSpeed * Time.deltaTime;
 			//Debug.Log("wave radius: " + mCircleCollider.radius);
@@ -71,7 +71,7 @@ public class WaveController : MonoBehaviour {
 
 	bool canWaveTriggerObject(Vector3 playerPosition, Vector3 targetPosition) {
 		RaycastHit2D hit = Physics2D.Raycast(playerPosition, targetPosition - playerPosition);
-		if (hit != null && hit.collider.CompareTag("waveBlocker")) {
+		if (hit.collider != null && hit.collider.CompareTag("waveBlocker")) {
 			return false;
 		}
 		return true;

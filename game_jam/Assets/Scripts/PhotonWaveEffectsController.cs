@@ -7,8 +7,14 @@ public class PhotonWaveEffectsController : MonoBehaviour {
 	public GameObject photonPrefab;
 	public int numberOfPhoton = 180;
 	public Color waveColor = Color.blue;
-	public float photonSpeed = 0.5f;
-	public float photonMaximumRange = 10.0f;
+	public float photonSpeedShort = 1.0f;
+	public float photonSpeedMid = 0.75f;
+	public float photonSpeedLong = 0.5f;
+	public float photonShortMaximumRange = 5.0f;
+	public float photonMidMaximumRange = 7.5f;
+	public float photonLongMaximumRange = 10.0f;
+	private float photonSpeed = 0.5f;
+	private float photonMaximumRange = 5.0f;
 	private GameObject[] photons;
 	private LineRenderer line;
 	private LineRenderer[] lines;
@@ -118,7 +124,17 @@ public class PhotonWaveEffectsController : MonoBehaviour {
 
 		currLines = 0;
 	}
-	public void PlayEffect() {
+	public void PlayEffect(WaveController.WaveType waveType) {
+		if (waveType == WaveController.WaveType.Long) {
+			photonSpeed = photonSpeedLong;
+			photonMaximumRange = photonLongMaximumRange;
+		} else if (waveType == WaveController.WaveType.Mid) {
+			photonSpeed = photonSpeedMid;
+			photonMaximumRange = photonMidMaximumRange;
+		} else if (waveType == WaveController.WaveType.Short) {
+			photonSpeed = photonSpeedShort;
+			photonMaximumRange = photonShortMaximumRange;
+		}
 		clearLinesAndPhotons();
 		createPhotons();
 		connectAllPhotons();

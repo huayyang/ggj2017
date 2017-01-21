@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour {
 	private float wavePressedTime = 0;
 	public float WaveMidPressTimeThreshold = 1.0f;
 	public float WaveLongPressTimeThreshold = 3.0f;
+	public float WavePressMaximumTime = 5.0f;
 	private bool isCastingWave = false;
 	
 	// Use this for initialization
@@ -72,15 +73,16 @@ public class PlayerController : MonoBehaviour {
 			if (isJumping && movement.y > 0) {
 				mMusicManager.PlayJumpSound();
 			}
+
+			mAnimator.SetFloat("inputX", movement.x);
+			mAnimator.SetFloat("inputY", movement.y);
 		}
 		// TODO(Huayu): jump animation
 		mAnimator.SetBool("isWalking", isWalking);
-		mAnimator.SetFloat("inputX", movement.x);
-		mAnimator.SetFloat("inputY", movement.y);
 	}
 
 	public bool isGrounded() {
-		RaycastHit2D hit = Physics2D.Raycast(mRigidbody.transform.position, Vector2.down, distanceToGround + 0.1f);
+		RaycastHit2D hit = Physics2D.Raycast(mRigidbody.transform.position, Vector2.down, distanceToGround + 1.0f);
 		if (hit.collider != null && hit.collider.CompareTag("photon")) {
 			return false;
 		}
@@ -120,7 +122,7 @@ public class PlayerController : MonoBehaviour {
 			wavePressedTime += Time.deltaTime;
 		}
 
-		if (Input.GetKeyUp(KeyCode.Space)) {
+		if (Input.GetKeyUp(KeyCode.Space) || wavePressedTime >= WavePressMaximumTime) {
 			if (wavePressedTime < WaveMidPressTimeThreshold) {
 				mWaveController.castWave(WaveController.WaveType.Short);
 			} else if (wavePressedTime < WaveLongPressTimeThreshold) {

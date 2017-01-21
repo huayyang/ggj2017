@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TimedLaserController : LaserController {
+public class TimedLaserController : MonoBehaviour {
+	public GameObject laserEffect;
 	public float timeInterval = 3.0f;
 	private float changeTimer = 0.0f;
 	private Animator mAnimator;

@@ -51,12 +51,14 @@
   <ItemGroup>
      <Compile Include="Assets\Particle Ribbon\Scripts\ReverseNormals.cs" />
      <Compile Include="Assets\Scripts\CameraController.cs" />
+     <Compile Include="Assets\Scripts\ConsistentObject.cs" />
      <Compile Include="Assets\Scripts\DisappearTrapController.cs" />
      <Compile Include="Assets\Scripts\LaserController.cs" />
      <Compile Include="Assets\Scripts\MusicManager.cs" />
      <Compile Include="Assets\Scripts\PhotonController.cs" />
      <Compile Include="Assets\Scripts\PhotonWaveEffectsController.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
+     <Compile Include="Assets\Scripts\ScreenFaderController.cs" />
      <Compile Include="Assets\Scripts\TimedLaserController.cs" />
      <Compile Include="Assets\Scripts\WarpSpotController.cs" />
      <Compile Include="Assets\Scripts\WaveChargerController.cs" />
