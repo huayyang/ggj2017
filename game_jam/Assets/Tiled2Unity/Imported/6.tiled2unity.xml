@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!--Tiled2Unity generated xml data-->
 <!--Do not modify by hand-->
-<!--Last exported: 1/21/2017 1:14:17 PM-->
+<!--Last exported: 1/21/2017 1:15:34 PM-->
 <Tiled2Unity version="1.0.9.4">
   <AssignMaterial mesh="mesh_0001" material="碰撞块" />
   <AssignMaterial mesh="mesh_0002" material="bg1" />

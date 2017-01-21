@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class WaveTriggerController : MonoBehaviour {
 	public GameObject triggerActionHandler;
-	public bool isEnabledOnStart;
 	public float resetTime = 0.0f;
 	private float triggerTimer = 0.0f;
 	private MusicManager mMusicManager;
