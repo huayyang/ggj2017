@@ -14,6 +14,7 @@ public class PhotonWaveEffectsController : MonoBehaviour {
 	private LineRenderer[] lines;
 	private int currLines = 0;
 	public Material material;
+	public float lineWidth = 0.5f;
 	// Use this for initialization
 	void Start () {
 		if (photons == null) {
@@ -34,8 +35,8 @@ public class PhotonWaveEffectsController : MonoBehaviour {
 		line.startColor = waveColor;
 		line.endColor = waveColor;
         line.numPositions = 2;
-		line.startWidth = 0.1f;
-		line.endWidth = 0.1f;
+		line.startWidth = lineWidth;
+		line.endWidth = lineWidth;
         line.useWorldSpace = true;
         line.SetPosition(0, startPos);
         line.SetPosition(1, endPos);
@@ -118,6 +119,7 @@ public class PhotonWaveEffectsController : MonoBehaviour {
 		currLines = 0;
 	}
 	public void PlayEffect() {
+		clearLinesAndPhotons();
 		createPhotons();
 		connectAllPhotons();
 	}
