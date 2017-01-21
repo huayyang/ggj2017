@@ -19,6 +19,7 @@ public class WaveController : MonoBehaviour {
 	public const float MidWaveMaximumRadius = 7.5f;
 	public const float ShortWaveSpeed = 1.0f;
 	public const float ShortWaveMaximumRadius = 5.0f;
+	private Vector3 castPosition;
 
 	private float waveInitialRadius = 0.5f;
 	// Use this for initialization
@@ -54,6 +55,7 @@ public class WaveController : MonoBehaviour {
 			waveMaxRadius = ShortWaveMaximumRadius;
 		}
 		mCircleCollider.enabled = true;
+		castPosition = mPlayerWaveCollider.transform.position;
 		StartCoroutine(waveStart(waveType));
 	}
 
@@ -70,10 +72,14 @@ public class WaveController : MonoBehaviour {
 	}
 
 	bool canWaveTriggerObject(Vector3 playerPosition, Vector3 targetPosition) {
-		RaycastHit2D hit = Physics2D.Raycast(playerPosition, targetPosition - playerPosition);
-		if (hit.collider != null && hit.collider.CompareTag("waveBlocker")) {
-			return false;
+		float distance = Vector2.Distance(playerPosition, targetPosition);
+		RaycastHit2D[] hits = Physics2D.RaycastAll(playerPosition, targetPosition - playerPosition, distance);
+		for (int i = 0; i < hits.Length; ++i) {
+			if (hits[i].collider != null && hits[i].collider.CompareTag("waveBlocker")) {
+				return false;
+			}
 		}
+		
 		return true;
 	}
 
@@ -82,13 +88,11 @@ public class WaveController : MonoBehaviour {
 			return;
 		}
 
-		if (!canWaveTriggerObject(mPlayerWaveCollider.transform.position, collider.transform.position)) {
+		if (!canWaveTriggerObject(castPosition, collider.transform.position)) {
 			return;
 		}
 
 		collider.SendMessageUpwards("handleWaveAction");
-
-		Debug.Log("Wave OnTriggerEnter");
 	}
 
 

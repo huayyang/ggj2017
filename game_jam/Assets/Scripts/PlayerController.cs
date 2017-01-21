@@ -74,6 +74,9 @@ public class PlayerController : MonoBehaviour {
 		bool isJumping = false;
 
 		Vector2 movement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+		if (movement.y < 0) {
+			movement.y = 0;
+		}
 		Vector2 movementForce = new Vector2(movement.x * mMoveForce, movement.y * mJumpForce);
 		
 		if (movementForce != Vector2.zero) {
@@ -175,14 +178,13 @@ public class PlayerController : MonoBehaviour {
 	public void death() {
 		enabled = false;
 		mMusicManager.PlayDeathSound();
-		StartCoroutine(reloadAfterTime(3.0f));
+		StartCoroutine(reloadAfterTime(1.0f));
 	}
 
 	 IEnumerator reloadAfterTime(float time) {
 		 yield return new WaitForSeconds(time);
-
-		 mMusicManager.PlayRespwanSound();
      	 Scene loadedLevel = SceneManager.GetActiveScene();
     	 SceneManager.LoadScene (loadedLevel.buildIndex);
+		 mMusicManager.PlayRespwanSound();
 	}
 }

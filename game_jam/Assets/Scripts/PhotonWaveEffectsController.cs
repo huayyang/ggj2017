@@ -51,7 +51,7 @@ public class PhotonWaveEffectsController : MonoBehaviour {
         line.useWorldSpace = true;
         line.SetPosition(0, startPos);
         line.SetPosition(1, endPos);
-        line.gameObject.layer = 1;
+        line.gameObject.layer = 5;
     }
 
 	void Update() {

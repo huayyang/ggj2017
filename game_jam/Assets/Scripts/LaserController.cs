@@ -25,7 +25,6 @@ public class LaserController : MonoBehaviour {
 			return;
 		}
 
-		//TODO(Huayu): Fade in, Fade out
 		collider.SendMessageUpwards("death");
 	}
 }

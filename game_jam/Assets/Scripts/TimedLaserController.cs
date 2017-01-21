@@ -25,4 +25,12 @@ public class TimedLaserController : MonoBehaviour {
 			mCollider.enabled = laserEffect.activeSelf;
 		}
 	}
+
+	void OnTriggerEnter2D(Collider2D collider) {
+		if (!collider.CompareTag("Player")) {
+			return;
+		}
+
+		collider.SendMessageUpwards("death");
+	}
 }
