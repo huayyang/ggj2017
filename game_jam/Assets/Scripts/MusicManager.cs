@@ -14,7 +14,14 @@ public class MusicManager : MonoBehaviour {
 	private AudioSource mAudioSource;
 	// Use this for initialization
 	void Start () {
-		mAudioSource = this.GetComponent<AudioSource>();
+		 mAudioSource = this.GetComponent<AudioSource>();
+	}
+
+	void Awake() {
+		DontDestroyOnLoad(gameObject);
+		if (FindObjectsOfType(GetType()).Length > 1) {
+             Destroy(gameObject);
+		}
 	}
 	
 	// Update is called once per frame
@@ -28,6 +35,10 @@ public class MusicManager : MonoBehaviour {
 
 	public void PlayPassLevelSound() {
 		mAudioSource.PlayOneShot(passLevelSound);
+	}
+
+	public void PlayRespwanSound() {
+		mAudioSource.PlayOneShot(respwanSound);
 	}
 
 	public void PlayWaveTriggerSound() {

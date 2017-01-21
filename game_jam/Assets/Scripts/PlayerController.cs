@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour {
 	private WaveController mWaveController;
 	private GameObject mWaveCollider;
 	private Animator mAnimator;
+	private MusicManager mMusicManager;
 
 	// Movements
 	public float mMoveForce = 5f;
@@ -34,6 +35,7 @@ public class PlayerController : MonoBehaviour {
 		isCastingWave = false;
 		distanceToGround = this.GetComponent<BoxCollider2D>().bounds.max.y - mRigidbody.transform.position.y;
 		mAnimator = this.GetComponent<Animator>();
+		mMusicManager = GameObject.FindGameObjectWithTag("musicManager").GetComponent<MusicManager>();
 	}
 	
 	// Update is called once per frame
@@ -49,6 +51,7 @@ public class PlayerController : MonoBehaviour {
 
 	void handlePlayerMovement(float deltaTime) {
 		bool isWalking = false;
+		bool isJumping = false;
 		Vector2 movement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 		Vector2 movementForce = new Vector2(movement.x * mMoveForce, movement.y * mJumpForce);
 		
@@ -59,11 +62,18 @@ public class PlayerController : MonoBehaviour {
 			if (isGrounded()) {
 				mRigidbody.AddForce(movementForce * Time.deltaTime);
 				isWalking = true;
+				if (movement.y != 0) {
+					isJumping = true;
+				}
 			} else if (movementForce.x != 0){
 				mRigidbody.AddForce(new Vector2(movementForce.x * Time.deltaTime, 0));
 			}
-		}
 
+			if (isJumping && movement.y > 0) {
+				mMusicManager.PlayJumpSound();
+			}
+		}
+		// TODO(Huayu): jump animation
 		mAnimator.SetBool("isWalking", isWalking);
 		mAnimator.SetFloat("inputX", movement.x);
 		mAnimator.SetFloat("inputY", movement.y);
@@ -119,6 +129,7 @@ public class PlayerController : MonoBehaviour {
 				mWaveController.castWave(WaveController.WaveType.Long);
 			}
 
+			mMusicManager.PlayAbilitySound();
 			wavePressedTime = 0.0f;
 			isCastingWave = false;
 		}
@@ -135,7 +146,15 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	public void death() {
-		Scene loadedLevel = SceneManager.GetActiveScene();
-     	SceneManager.LoadScene (loadedLevel.buildIndex);
+		mMusicManager.PlayDeathSound();
+		StartCoroutine(reloadAfterTime(3.0f));
+	}
+
+	 IEnumerator reloadAfterTime(float time) {
+		 yield return new WaitForSeconds(time);
+
+		 mMusicManager.PlayRespwanSound();
+     	 Scene loadedLevel = SceneManager.GetActiveScene();
+    	 SceneManager.LoadScene (loadedLevel.buildIndex);
 	}
 }

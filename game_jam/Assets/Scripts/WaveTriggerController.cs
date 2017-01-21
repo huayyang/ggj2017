@@ -6,9 +6,10 @@ public class WaveTriggerController : MonoBehaviour {
 	public GameObject triggerActionHandler;
 	public bool isEnabledOnStart;
 	public float resetTime = 0.0f;
+	private MusicManager mMusicManager;
 	// Use this for initialization
 	void Start () {
-
+		mMusicManager = GameObject.FindGameObjectWithTag("musicManager").GetComponent<MusicManager>();
 	}
 	
 	// Update is called once per frame
@@ -28,7 +29,7 @@ public class WaveTriggerController : MonoBehaviour {
 	}
 
 	void handleWaveAction() {
-		Debug.Log("handleWaveAction");
+		mMusicManager.PlayWaveTriggerSound();
 		if (resetTime > 0) {
 			StartCoroutine(setEnable(!triggerActionHandler.activeSelf));
 		} else {

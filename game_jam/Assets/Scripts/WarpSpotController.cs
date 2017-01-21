@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class WarpSpotController : MonoBehaviour {
+	private MusicManager mMusicManager;
 	public string nextLevelScene;
 	// Use this for initialization
 	void Start () {
@@ -20,6 +21,7 @@ public class WarpSpotController : MonoBehaviour {
 			return;
 		}
 
+		mMusicManager.PlayPassLevelSound();
 		//TODO(Huayu): Fade in, Fade out
 		SceneManager.LoadScene(nextLevelScene);
 	}
