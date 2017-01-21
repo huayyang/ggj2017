@@ -16,8 +16,9 @@ public class PlayerController : MonoBehaviour {
 	public float mMoveForce = 5f;
 	public float mJumpForce = 8f;
 	private float distanceToGround;
-
 	public float horizontalMaximumSpeed = 2.5f;
+	private bool isFalling = false;
+	private bool isInAir = false;
 
 	// Ability
 	// Used as initial amount
@@ -40,19 +41,37 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void FixedUpdate () {
+	void Update() {
 		handlePlayerMovement(Time.deltaTime);
 		handlePlayerRestart();
-	}
-
-	void Update() {
+		checkPlayerJumpingAnimation();
 		handleCastWaves();
 		checkDeath();
+	}
+
+	void checkPlayerJumpingAnimation() {
+		bool isOnGround = isGrounded();
+		if (!isOnGround && mRigidbody.velocity.y < -2.0f) {
+			Debug.Log("startFall: " + mRigidbody.velocity.y);
+			isFalling = true;
+			isInAir = true;
+			mAnimator.SetBool("isFalling", isFalling);
+		}
+
+		if (isFalling && isOnGround) {
+			Debug.Log("Touch Ground");
+			mAnimator.SetTrigger("touchGround");
+			mRigidbody.velocity.Set(mRigidbody.velocity.x, 0);
+			isFalling = false;
+			isInAir = false;
+			mAnimator.SetBool("isFalling", isFalling);
+		}
 	}
 
 	void handlePlayerMovement(float deltaTime) {
 		bool isWalking = false;
 		bool isJumping = false;
+
 		Vector2 movement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 		Vector2 movementForce = new Vector2(movement.x * mMoveForce, movement.y * mJumpForce);
 		
@@ -60,11 +79,14 @@ public class PlayerController : MonoBehaviour {
 			if (Mathf.Abs(mRigidbody.velocity.x) >= horizontalMaximumSpeed) {
 				movementForce.x = 0;
 			}
-			if (isGrounded()) {
+			if (!isInAir && isGrounded()) {
 				mRigidbody.AddForce(movementForce * Time.deltaTime);
 				isWalking = true;
 				if (movement.y != 0) {
 					isJumping = true;
+					isInAir = true;
+					Debug.Log("start jump");
+					mAnimator.SetTrigger("startJump");
 				}
 			} else if (movementForce.x != 0){
 				mRigidbody.AddForce(new Vector2(movementForce.x * Time.deltaTime, 0));
@@ -77,12 +99,13 @@ public class PlayerController : MonoBehaviour {
 			mAnimator.SetFloat("inputX", movement.x);
 			mAnimator.SetFloat("inputY", movement.y);
 		}
-		// TODO(Huayu): jump animation
+
 		mAnimator.SetBool("isWalking", isWalking);
+		mAnimator.SetBool("isInAir", isInAir);
 	}
 
 	public bool isGrounded() {
-		RaycastHit2D hit = Physics2D.Raycast(mRigidbody.transform.position, Vector2.down, distanceToGround + 1.0f);
+		RaycastHit2D hit = Physics2D.Raycast(mRigidbody.transform.position, Vector2.down, distanceToGround + 0.8f);
 		if (hit.collider != null && hit.collider.CompareTag("photon")) {
 			return false;
 		}
