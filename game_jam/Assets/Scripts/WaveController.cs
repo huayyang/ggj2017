@@ -28,6 +28,7 @@ public class WaveController : MonoBehaviour {
 		mCircleCollider.radius = waveInitialRadius;
 		waveCastTimer = 0.0f;
 		mWaveEffectController = this.GetComponent<PhotonWaveEffectsController>();
+		mCircleCollider.enabled = false;
 	}
 	
 	// Update is called once per frame
@@ -52,6 +53,7 @@ public class WaveController : MonoBehaviour {
 			waveSpeed = ShortWaveSpeed;
 			waveMaxRadius = ShortWaveMaximumRadius;
 		}
+		mCircleCollider.enabled = true;
 		StartCoroutine(waveStart());
 	}
 
@@ -64,6 +66,7 @@ public class WaveController : MonoBehaviour {
 		}
 
 		mCircleCollider.radius = waveInitialRadius;
+		mCircleCollider.enabled = false;
 	}
 
 	bool canWaveTriggerObject(Vector3 playerPosition, Vector3 targetPosition) {
