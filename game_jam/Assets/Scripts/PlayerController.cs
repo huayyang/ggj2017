@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour {
 
 	// Ability
 	// Used as initial amount
-	public int currentWaveAmount = 2;
+	public int currentWaveAmount = 600;
 	private float wavePressedTime = 0;
 	public float WaveMidPressTimeThreshold = 1.0f;
 	public float WaveLongPressTimeThreshold = 3.0f;
@@ -44,12 +44,11 @@ public class PlayerController : MonoBehaviour {
 		handlePlayerMovement(Time.deltaTime);
 		handlePlayerRestart();
 		checkPlayerJumpingAnimation();
-		handleCastWaves();
 		checkDeath();
 	}
 	// Update is called once per frame
 	void Update() {
-		
+		handleCastWaves();
 	}
 
 	void checkPlayerJumpingAnimation() {
@@ -172,7 +171,8 @@ public class PlayerController : MonoBehaviour {
 			} else {
 				mWaveController.castWave(WaveController.WaveType.Long);
 			}
-
+			mAnimator.SetTrigger("castAbility");
+			currentWaveAmount -= 1;
 			mMusicManager.PlayAbilitySound();
 			wavePressedTime = 0.0f;
 			isCastingWave = false;
@@ -192,7 +192,7 @@ public class PlayerController : MonoBehaviour {
 	public void death() {
 		enabled = false;
 		mMusicManager.PlayDeathSound();
-		StartCoroutine(reloadAfterTime(1.0f));
+		StartCoroutine(reloadAfterTime(0.1f));
 	}
 
 	 IEnumerator reloadAfterTime(float time) {
@@ -200,5 +200,24 @@ public class PlayerController : MonoBehaviour {
      	 Scene loadedLevel = SceneManager.GetActiveScene();
     	 SceneManager.LoadScene (loadedLevel.buildIndex);
 		 mMusicManager.PlayRespwanSound();
+	}
+
+	public float waveCastCDLeft() {
+		float cd = mWaveController.waveCastCD();
+		if (cd < 0) {
+			cd = 0;
+		}
+
+		return cd;
+	}
+
+	public WaveController.WaveType waveTypeMessageForUI() {
+		if (wavePressedTime < WaveMidPressTimeThreshold) {
+			return WaveController.WaveType.Short;
+		} else if (wavePressedTime < WaveLongPressTimeThreshold) {
+			return WaveController.WaveType.Mid;
+		} else {
+			return WaveController.WaveType.Long;
+		}
 	}
 }

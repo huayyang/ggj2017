@@ -41,6 +41,10 @@ public class WaveController : MonoBehaviour {
 	public bool canCastWave() {
 		return waveCastTimer <= 0;
 	}
+
+	public float waveCastCD() {
+		return waveCastTimer;
+	}
 	public void castWave(WaveType waveType) {
 		mWaveType = waveType;
 		waveCastTimer = waveCastCoolDown;
