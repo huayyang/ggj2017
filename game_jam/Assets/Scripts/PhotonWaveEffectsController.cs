@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PhotonWaveEffectsController : MonoBehaviour {
-
+	private const float ShortWaveMultiplier = 6.75f;
+	private const float MidWaveMultiplier = 7.5f;
+	private const float LongWaveMultiplier = 4.5f;
 	public GameObject photonPrefab;
 	public int numberOfPhoton = 180;
 	public Color waveColor = Color.blue;
@@ -21,8 +23,10 @@ public class PhotonWaveEffectsController : MonoBehaviour {
 	private int currLines = 0;
 	public Material material;
 	public float lineWidth = 0.5f;
+	private Vector3 createPos;
+	private GameObject mPlayer;
 
-	private float destroyTimeLimit = 10.0f;
+	private float destroyTimeLimit = 60.0f;
 	private float lastCastTime = 0.0f;
 	// Use this for initialization
 	void Start () {
@@ -33,7 +37,8 @@ public class PhotonWaveEffectsController : MonoBehaviour {
 			lines = new LineRenderer[numberOfPhoton];
 		}
 		lastCastTime = 0;
-		destroyTimeLimit = 10.0f;
+		destroyTimeLimit = 60.0f;
+		mPlayer = GameObject.FindGameObjectWithTag("Player");
 	}
 
 	private void createLine(Vector3 startPos, Vector3 endPos) {
@@ -76,7 +81,11 @@ public class PhotonWaveEffectsController : MonoBehaviour {
 	private void updatePhotons() {
 		for (int i = 0; i < numberOfPhoton; ++i) {
 			if (photons[i] != null) {
+				if (Vector3.Distance(photons[i].transform.position, createPos) > photonMaximumRange) {
+					clearLinesAndPhotons();
+				}
 				photons[i].transform.Translate(photons[i].transform.right * photonSpeed * Time.deltaTime);
+				
 			}
 		}
 	}
@@ -104,7 +113,7 @@ public class PhotonWaveEffectsController : MonoBehaviour {
 		if (photons == null) {
 			photons = new GameObject[numberOfPhoton];
 		}
-		Vector3 createPos = transform.position;
+		createPos = mPlayer.transform.position;
 		createPos.z -= 1;
 		Quaternion rotation = new Quaternion();
 		float degreeDifference = 360.0f / numberOfPhoton;
@@ -133,15 +142,16 @@ public class PhotonWaveEffectsController : MonoBehaviour {
 	}
 	public void PlayEffect(WaveController.WaveType waveType) {
 		if (waveType == WaveController.WaveType.Long) {
-			photonSpeed = photonSpeedLong;
+			photonSpeed = photonSpeedLong * LongWaveMultiplier;
 			photonMaximumRange = photonLongMaximumRange;
 		} else if (waveType == WaveController.WaveType.Mid) {
-			photonSpeed = photonSpeedMid;
+			photonSpeed = photonSpeedMid * MidWaveMultiplier;
 			photonMaximumRange = photonMidMaximumRange;
 		} else if (waveType == WaveController.WaveType.Short) {
-			photonSpeed = photonSpeedShort;
+			photonSpeed = photonSpeedShort * ShortWaveMultiplier;
 			photonMaximumRange = photonShortMaximumRange;
 		}
+
 		clearLinesAndPhotons();
 		createPhotons();
 		connectAllPhotons();

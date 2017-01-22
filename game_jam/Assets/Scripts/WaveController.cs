@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WaveController : MonoBehaviour {
 
-	private GameObject mPlayerWaveCollider;
+	private GameObject mPlayer;
 	private CircleCollider2D mCircleCollider;
 	private PhotonWaveEffectsController mWaveEffectController;
 	public float waveCastCoolDown = 3.0f;
@@ -13,18 +13,18 @@ public class WaveController : MonoBehaviour {
 	public enum WaveType {Long, Mid, Short};
 	public WaveType mWaveType;
 	public float waveMaxRadius = 10.0f;
-	public const float LongWaveSpeed = 0.5f;
-	public const float LongWaveMaximumRadius = 10.0f;
-	public const float MidWaveSpeed = 0.75f;
-	public const float MidWaveMaximumRadius = 7.5f;
-	public const float ShortWaveSpeed = 1.0f;
-	public const float ShortWaveMaximumRadius = 5.0f;
+	public float LongWaveSpeed = 0.5f;
+	public float LongWaveMaximumRadius = 1000.0f;
+	public float MidWaveSpeed = 0.75f;
+	public float MidWaveMaximumRadius = 7.5f;
+	public float ShortWaveSpeed = 1.0f;
+	public float ShortWaveMaximumRadius = 5.0f;
 	private Vector3 castPosition;
 
-	private float waveInitialRadius = 0.5f;
+	private float waveInitialRadius = 0.0f;
 	// Use this for initialization
 	void Start () {
-		mPlayerWaveCollider = GameObject.FindGameObjectWithTag("waveCollider");
+		mPlayer = GameObject.FindGameObjectWithTag("Player");
 		mCircleCollider = this.GetComponent<CircleCollider2D>();
 		mCircleCollider.radius = waveInitialRadius;
 		waveCastTimer = 0.0f;
@@ -55,7 +55,8 @@ public class WaveController : MonoBehaviour {
 			waveMaxRadius = ShortWaveMaximumRadius;
 		}
 		mCircleCollider.enabled = true;
-		castPosition = mPlayerWaveCollider.transform.position;
+		mCircleCollider.radius = 0.0f;
+		castPosition = mPlayer.transform.position;
 		StartCoroutine(waveStart(waveType));
 	}
 
@@ -63,12 +64,13 @@ public class WaveController : MonoBehaviour {
 		mWaveEffectController.PlayEffect(waveType);
 		while (mCircleCollider.radius < waveMaxRadius) {
 			mCircleCollider.radius += waveSpeed * Time.deltaTime;
-			//Debug.Log("wave radius: " + mCircleCollider.radius);
+			mCircleCollider.transform.position = castPosition;
 			yield return null;
 		}
 
 		mCircleCollider.radius = waveInitialRadius;
 		mCircleCollider.enabled = false;
+		
 	}
 
 	bool canWaveTriggerObject(Vector3 playerPosition, Vector3 targetPosition) {

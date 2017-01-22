@@ -72,19 +72,33 @@ public class PlayerController : MonoBehaviour {
 	void handlePlayerMovement(float deltaTime) {
 		bool isWalking = false;
 		bool isJumping = false;
+		bool isOnGround = isGrounded();
+		float firction = mRigidbody.sharedMaterial.friction;
+		float maxMovingSpeedAllowed = horizontalMaximumSpeed;
 
 		Vector2 movement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 		if (movement.y < 0) {
 			movement.y = 0;
 		}
-		Vector2 movementForce = new Vector2(movement.x * mMoveForce, movement.y * mJumpForce);
+		Vector2 movementForce = new Vector2(movement.x * mMoveForce * Time.deltaTime, movement.y * mJumpForce  * Time.deltaTime);
+		if (!isOnGround) {
+			firction = 0.0f;
+		}
+		if (movementForce.x * mRigidbody.velocity.x < 0) {
+			maxMovingSpeedAllowed += Mathf.Abs(mRigidbody.velocity.x);
+		} else {
+			maxMovingSpeedAllowed -= Mathf.Abs(mRigidbody.velocity.x);
+		}
+		double forceMaxAllowed = (maxMovingSpeedAllowed / Time.deltaTime - firction * mRigidbody.gravityScale) * mRigidbody.mass;
+		forceMaxAllowed *= movement.x;
+		if (Mathf.Abs((float)forceMaxAllowed) < Mathf.Abs(movementForce.x)) {
+			movementForce.Set((float)forceMaxAllowed, movementForce.y);
+		}
+		
 		
 		if (movementForce != Vector2.zero) {
-			if (Mathf.Abs(mRigidbody.velocity.x) >= horizontalMaximumSpeed) {
-				movementForce.x = 0;
-			}
-			if (!isInAir && isGrounded()) {
-				mRigidbody.AddForce(movementForce * Time.deltaTime);
+			if (!isInAir && isOnGround) {
+				mRigidbody.AddForce(movementForce);
 				isWalking = true;
 				if (movement.y != 0) {
 					isJumping = true;
@@ -92,7 +106,7 @@ public class PlayerController : MonoBehaviour {
 					mAnimator.SetTrigger("startJump");
 				}
 			} else if (movementForce.x != 0){
-				mRigidbody.AddForce(new Vector2(movementForce.x * Time.deltaTime, 0));
+				mRigidbody.AddForce(new Vector2(movementForce.x, 0));
 			}
 
 			if (isJumping && movement.y > 0) {
@@ -110,7 +124,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	public bool isGrounded() {
-		RaycastHit2D hit = Physics2D.Raycast(mRigidbody.transform.position, Vector2.down, distanceToGround + 0.8f);
+		RaycastHit2D hit = Physics2D.Raycast(mRigidbody.transform.position, Vector2.down, distanceToGround + 0.6f);
 		if (hit.collider != null && hit.collider.CompareTag("photon")) {
 			return false;
 		}
