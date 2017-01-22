@@ -50,6 +50,8 @@ public class MusicManager : MonoBehaviour {
 	}
 
 	public void PlayJumpSound() {
+		mAudioSource.volume = 0.2f;
 		mAudioSource.PlayOneShot(jumpSound);
+		mAudioSource.volume = 1.0f;
 	}
 }

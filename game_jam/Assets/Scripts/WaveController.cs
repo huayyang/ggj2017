@@ -20,6 +20,9 @@ public class WaveController : MonoBehaviour {
 	public float ShortWaveSpeed = 1.0f;
 	public float ShortWaveMaximumRadius = 5.0f;
 	private Vector3 castPosition;
+	private const float triggerTimeMinum = 0.1f;
+
+	Dictionary<string, float> waveTriggerGuard = new Dictionary<string, float>();
 
 	private float waveInitialRadius = 0.0f;
 	// Use this for initialization
@@ -58,8 +61,9 @@ public class WaveController : MonoBehaviour {
 			waveSpeed = ShortWaveSpeed;
 			waveMaxRadius = ShortWaveMaximumRadius;
 		}
+		// Debug.Log("waveSpeed: " + waveSpeed + ", waveRadius" + waveMaxRadius);
 		mCircleCollider.enabled = true;
-		mCircleCollider.radius = 0.0f;
+		mCircleCollider.radius = waveInitialRadius;
 		castPosition = mPlayer.transform.position;
 		StartCoroutine(waveStart(waveType));
 	}
@@ -97,6 +101,15 @@ public class WaveController : MonoBehaviour {
 		if (!canWaveTriggerObject(castPosition, collider.transform.position)) {
 			return;
 		}
+		float curTime = Time.time;
+		if (waveTriggerGuard.ContainsKey(collider.name)) {
+			float lastTriggerTime = waveTriggerGuard[collider.name];
+			if (curTime - lastTriggerTime < triggerTimeMinum) {
+				return;
+			}
+		}
+
+		waveTriggerGuard[collider.name] = curTime;
 
 		collider.SendMessageUpwards("handleWaveAction");
 	}

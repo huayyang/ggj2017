@@ -24,9 +24,9 @@ public class PlayerController : MonoBehaviour {
 	// Used as initial amount
 	public int currentWaveAmount = 600;
 	private float wavePressedTime = 0;
-	public float WaveMidPressTimeThreshold = 1.0f;
-	public float WaveLongPressTimeThreshold = 3.0f;
-	public float WavePressMaximumTime = 5.0f;
+	public float WaveMidPressTimeThreshold = 0.1f;
+	public float WaveLongPressTimeThreshold = 2.0f;
+	public float WavePressMaximumTime = 4.0f;
 	private bool isCastingWave = false;
 	
 	// Use this for initialization
